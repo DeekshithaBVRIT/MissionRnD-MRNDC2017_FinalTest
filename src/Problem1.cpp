@@ -36,8 +36,61 @@ Note : Only 25% of Cases ,will have numbers >9 in the Strings .
 #include <stddef.h>
 #include <stdlib.h>
 
-
-int isSTRMatched(char *str1, char *str2){
-
+int isDigit(char letter) {
+	if (letter >= '0' && letter <= '9')
+		return 1;
 	return 0;
+}
+
+int isLetter(char letter) {
+	if ((letter >= 'a' && letter <= 'z') || (letter >= 'A' && letter <= 'Z'))
+		return 1;
+	return 0;
+}
+int getLength(char *str) {
+	if (str == NULL)
+		return -1;
+	int len = 0;
+	for (len = 0; str[len]; len++);
+	return len;
+}
+
+char *getString(char *str, int *len){
+	char *st = (char *)calloc(20002, sizeof(char));
+	int Num = 0, k = 0;
+	for (int i = 0; str[i]; i++) {
+		if (isDigit(str[i])){
+			Num = Num * 10 + (str[i] - '0');
+		} else{
+			for (int j = 0; j<Num; j++){
+				st[k++] = '0';
+			}
+			st[k++] = str[i];
+			Num = 0;
+		}
+	}
+	for (int j = 0; j<Num; j++){
+		st[k++] = '0';
+	}
+	*len = k;
+	return st;
+}
+int isSTRMatched(char *str1, char *str2){
+	if (str1 == NULL || str2 == NULL)
+		return -1;
+	int len1, len2;
+	char *st1 = getString(str1, &len1);
+	char *st2 = getString(str2, &len2);
+	if (len1 != len2)
+		return 0;
+	int len = len1;
+	for (int i = 0; i<len; i++){
+		if (st1[i] == '0' || st2[i] == '0'){
+			continue;
+		}
+		if (st1[i] != st2[i]){
+			return 0;
+		}
+	}
+	return 1;
 }
